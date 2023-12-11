@@ -1,9 +1,14 @@
 module.exports = [{
-  text: '通用',
+  text: '预设',
   collapsable: true,
-  children: [{
-    text: 'Button 按钮',
-    link: '/components/pages/Button',
-  }]
+  children: [
+    '/components/pages/presets/all.md'
+  ]
+},{
+  text: '图层',
+  collapsable: true,
+  children: [
+    '/components/pages/layerModule/loadlayer.md'
+  ]
 }
 ]

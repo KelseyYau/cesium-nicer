@@ -3,3 +3,4 @@ doc/node_modules
 doc/docs/.vuepress/.temp
 doc/docs/.vuepress/.cache
 doc/docs/.vuepress/public/js
+examples/node_modules

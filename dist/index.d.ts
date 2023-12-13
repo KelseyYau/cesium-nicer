@@ -14,6 +14,25 @@ declare const _default$1: {
     };
 };
 
+interface BaseOptions {
+    id?: string;
+    minimumLevel?: number;
+    maximumLevel?: number;
+    name?: string;
+}
+declare class BaseLayer {
+    name: string;
+    id: string;
+    layerType: string;
+    protected layer: Cesium.ImageryLayer;
+    private _alpha;
+    constructor(options: BaseOptions);
+    get opacity(): number;
+    set opacity(alpha: number);
+    get visible(): boolean;
+    set visible(show: boolean);
+}
+
 declare enum TiandituType {
     Vec = "vec",
     Img = "img",
@@ -26,15 +45,16 @@ declare enum TiandituType {
 interface TiandituOptions {
     id?: string;
     url?: '';
+    name?: string;
     type: TiandituType;
     tk: string;
     subdomains?: string | Array<string>;
+    minimumLevel?: number;
+    maximumLevel?: number;
 }
-declare class TiandituLayer {
+declare class TiandituLayer extends BaseLayer {
     private _provider;
     private _options;
-    private _layer;
-    id: string;
     constructor(options: TiandituOptions);
     initProvider(options: TiandituOptions): Cesium.WebMapTileServiceImageryProvider;
     add(viewer: Cesium.Viewer): Cesium.ImageryLayer;

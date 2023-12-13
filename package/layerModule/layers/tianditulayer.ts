@@ -1,3 +1,5 @@
+import BaseLayer from "./baselayer"
+
 enum TiandituType {
   Vec = 'vec',
   Img = 'img',
@@ -11,24 +13,26 @@ enum TiandituType {
 interface TiandituOptions {
   id?: string
   url?: '',
+  name?: string
   type: TiandituType,
   tk: string,
   subdomains?: string|Array<string>
+  minimumLevel?: number
+  maximumLevel?: number
 }
 
-export default class TiandituLayer {
+export default class TiandituLayer extends BaseLayer {
   private _provider: Cesium.WebMapTileServiceImageryProvider
   private _options: TiandituOptions
-  private _layer: Cesium.ImageryLayer
-  public id: string
 
   constructor(options: TiandituOptions) {
+    super(options)
     this._options = options
     this._provider = this.initProvider(options)
+    this.layerType = 'TIANDITU'
   }
 
   initProvider(options: TiandituOptions) {
-    this.id = options.id || Cesium.createGuid()
     const type = options.type || 'img'
     const tileMatrix = 'w'
     const defaultSubdomains = ['0','1','2','3','4','5','6','7']
@@ -39,7 +43,7 @@ export default class TiandituLayer {
       style: 'default',
       tileMatrixSetID: tileMatrix,
       subdomains: defaultSubdomains,
-      maximumLevel: 18,
+      maximumLevel: options.maximumLevel || 18,
       tilingScheme: new Cesium.WebMercatorTilingScheme()
     })
     return provider
@@ -47,13 +51,14 @@ export default class TiandituLayer {
 
   add(viewer: Cesium.Viewer): Cesium.ImageryLayer {
     if (!viewer) throw new Error('undefined viewer');
-    this._layer = viewer.imageryLayers.addImageryProvider(this._provider)
-    return this._layer
+    this.layer = viewer.imageryLayers.addImageryProvider(this._provider)
+    this.layer['id'] = this.id
+    return this.layer
   }
 
   remove(viewer: Cesium.Viewer): void {
     if (!viewer) throw new Error('undefined viewer');
-    viewer.imageryLayers.remove(this._layer)
+    viewer.imageryLayers.remove(this.layer)
   }
 
   

@@ -17,13 +17,43 @@ var index$1 = {
   viewer
 };
 
-class TiandituLayer {
+class BaseLayer {
   constructor(options) {
+    this.name = options.name;
+    this.id = options.id || Cesium.createGuid();
+    this._alpha = 1;
+  }
+  get opacity() {
+    return this._alpha;
+  }
+  set opacity(alpha) {
+    if (this.layer) {
+      this.layer.alpha = alpha;
+    }
+    this._alpha = alpha;
+  }
+  get visible() {
+    if (this.layer) {
+      return this.layer.show;
+    } else {
+      return false;
+    }
+  }
+  set visible(show) {
+    if (this.layer) {
+      this.layer.show = show;
+    }
+  }
+}
+
+class TiandituLayer extends BaseLayer {
+  constructor(options) {
+    super(options);
     this._options = options;
     this._provider = this.initProvider(options);
+    this.layerType = "TIANDITU";
   }
   initProvider(options) {
-    this.id = options.id || Cesium.createGuid();
     const type = options.type || "img";
     const tileMatrix = "w";
     const defaultSubdomains = ["0", "1", "2", "3", "4", "5", "6", "7"];
@@ -34,7 +64,7 @@ class TiandituLayer {
       style: "default",
       tileMatrixSetID: tileMatrix,
       subdomains: defaultSubdomains,
-      maximumLevel: 18,
+      maximumLevel: options.maximumLevel || 18,
       tilingScheme: new Cesium.WebMercatorTilingScheme()
     });
     return provider;
@@ -42,13 +72,14 @@ class TiandituLayer {
   add(viewer) {
     if (!viewer)
       throw new Error("undefined viewer");
-    this._layer = viewer.imageryLayers.addImageryProvider(this._provider);
-    return this._layer;
+    this.layer = viewer.imageryLayers.addImageryProvider(this._provider);
+    this.layer["id"] = this.id;
+    return this.layer;
   }
   remove(viewer) {
     if (!viewer)
       throw new Error("undefined viewer");
-    viewer.imageryLayers.remove(this._layer);
+    viewer.imageryLayers.remove(this.layer);
   }
 }
 

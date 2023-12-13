@@ -7,7 +7,10 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "rimraf dist && rollup -c ",
-    "dev": "rollup -c --watch"
+    "dev": "rollup -c --watch && update-doc-static",
+    "update-doc-static": "remove-doc-static && add-doc-static",
+    "remove-doc-static": "shx rm doc/docs/.vuepress/public/js/CesiumNicer/CesiumNicer.js",
+    "add-doc-static": "shx cp dist/CesiumNicer.js doc/docs/.vuepress/public/js/CesiumNicer/"
   },
   "config": {
     "commitizen": {
@@ -26,6 +29,7 @@
     "rimraf": "^5.0.5",
     "rollup": "^4.7.0",
     "rollup-plugin-dts": "^6.1.0",
-    "rollup-plugin-esbuild": "^6.1.0"
+    "rollup-plugin-esbuild": "^6.1.0",
+    "shx": "^0.3.4"
   }
 }

@@ -1,4 +1,4 @@
-export default {
+export const viewerConfig = {
   animation: false,
   baseLayerPicker: false,
   fullscreenButton: false,

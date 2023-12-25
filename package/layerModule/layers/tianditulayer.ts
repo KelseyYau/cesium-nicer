@@ -1,20 +1,20 @@
-import BaseLayer from "./baselayer"
+import BaseLayer from "./BaseLayer"
 
-enum TiandituType {
-  Vec = 'vec',
-  Img = 'img',
-  Ter = 'ter',
-  Cia = 'cia',
-  Cva = 'cva',
-  Cta = 'cta',
-  Ibo = 'ibo'
+interface TiandituType {
+  Vec: 'vec',
+  Img: 'img',
+  Ter: 'ter',
+  Cia: 'cia',
+  Cva: 'cva',
+  Cta: 'cta',
+  Ibo: 'ibo'
 }
 
 interface TiandituOptions {
   id?: string
   url?: '',
   name?: string
-  type: TiandituType,
+  type: string,
   tk: string,
   subdomains?: string|Array<string>
   minimumLevel?: number
@@ -60,6 +60,4 @@ export default class TiandituLayer extends BaseLayer {
     if (!viewer) throw new Error('undefined viewer');
     viewer.imageryLayers.remove(this.layer)
   }
-
-  
 } 

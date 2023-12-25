@@ -1,5 +1,5 @@
-import viewer from "./viewConfig";
+import { viewerConfig } from "./viewConfig";
 
 export default {
-  viewer
+  viewerConfig
 }

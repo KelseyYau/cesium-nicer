@@ -6,11 +6,11 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "rimraf dist && rollup -c ",
-    "dev": "rollup -c --watch && update-doc-static",
-    "update-doc-static": "remove-doc-static && add-doc-static",
-    "remove-doc-static": "shx rm doc/docs/.vuepress/public/js/CesiumNicer/CesiumNicer.js",
-    "add-doc-static": "shx cp dist/CesiumNicer.js doc/docs/.vuepress/public/js/CesiumNicer/"
+    "build": "rimraf dist && rollup -c && pnpm  run update-example-lib",
+    "dev": "rollup -c --watch && update-example-lib",
+    "remove-example-lib": "shx rm -r examples/lib/",
+    "add-example-lib": "shx cp -r dist/ examples/lib/",
+    "update-example-lib": "pnpm run remove-example-lib && pnpm run add-example-lib"
   },
   "config": {
     "commitizen": {
@@ -31,5 +31,8 @@
     "rollup-plugin-dts": "^6.1.0",
     "rollup-plugin-esbuild": "^6.1.0",
     "shx": "^0.3.4"
+  },
+  "dependencies": {
+    "gcoord": "^1.0.5"
   }
 }

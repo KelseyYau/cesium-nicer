@@ -1,8 +1,8 @@
 (function (global, factory) {
-  typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
-  typeof define === 'function' && define.amd ? define(factory) :
-  (global = typeof globalThis !== 'undefined' ? globalThis : global || self, global.CesiumNicer = factory());
-})(this, (function () { 'use strict';
+  typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory(require('gcoord')) :
+  typeof define === 'function' && define.amd ? define(['gcoord'], factory) :
+  (global = typeof globalThis !== 'undefined' ? globalThis : global || self, global.CesiumNicer = factory(global.gcoord));
+})(this, (function (gcoord) { 'use strict';
 
   const viewerConfig = {
     animation: false,
@@ -89,8 +89,74 @@
     }
   }
 
+  class Gcj02TilingScheme extends Cesium.WebMercatorTilingScheme {
+    constructor(options) {
+      super(options);
+      this._projection = null;
+      this._projection = new Cesium.WebMercatorProjection(this.ellipsoid);
+      const mercatorProjection = new Cesium.WebMercatorProjection(this.ellipsoid);
+      this._projection.project = function(catographic, result) {
+        const LngLat84 = [Cesium.Math.toDegrees(catographic.longitude), Cesium.Math.toDegrees(catographic.latitude)];
+        const LngLatgcj02 = gcoord.transform(LngLat84, gcoord.WGS84, gcoord.GCJ02);
+        const cartographicGcj02 = new Cesium.Cartographic(Cesium.Math.toRadians(LngLatgcj02[0]), Cesium.Math.toRadians(LngLatgcj02[1]));
+        const mercator = mercatorProjection.project(cartographicGcj02, result);
+        return new Cesium.Cartesian2(mercator.x, mercator.y);
+      };
+      this._projection.unproject = function(cartesian, result) {
+        let cartographic84 = mercatorProjection.unproject(cartesian, result);
+        let LngLatGcj02 = [Cesium.Math.toDegrees(cartographic84.longitude), Cesium.Math.toDegrees(cartographic84.latitude)];
+        let LngLat84 = gcoord.transform(LngLatGcj02, gcoord.GCJ02, gcoord.WGS84);
+        return new Cesium.Cartographic(Cesium.Math.toRadians(LngLat84[0]), Cesium.Math.toRadians(LngLat84[1]));
+      };
+    }
+  }
+
+  class AmapImageryProvider extends Cesium.UrlTemplateImageryProvider {
+    constructor(options) {
+      options["tilingScheme"] = new Gcj02TilingScheme({});
+      super(options);
+    }
+  }
+
+  const TILE_URL = {
+    "img": "https://webst{s}.is.autonavi.com/appmaptile?style=6&x={x}&y={y}&z={z}",
+    "vec": "http://webrd{s}.is.autonavi.com/appmaptile?lang=zh_cn&size=1&scale=1&style=8&x={x}&y={y}&z={z}",
+    "cva": "http://webst{s}.is.autonavi.com/appmaptile?x={x}&y={y}&z={z}&lang=zh_cn&size=1&scale=1&style=8"
+  };
+  class AmapLayer extends BaseLayer {
+    constructor(options) {
+      super(options);
+      this._provider = this.initProvider(options);
+      this._options = options;
+      this.layerType = "AMAP";
+    }
+    initProvider(options) {
+      const { type, url, minimumLevel, maximumLevel, subdomains } = options;
+      const provider = new AmapImageryProvider({
+        url: url || TILE_URL[type],
+        minimumLevel: minimumLevel || 2,
+        maximumLevel: maximumLevel || 18,
+        subdomains: subdomains || ["01", "02", "03", "04"]
+      });
+      return provider;
+    }
+    add(viewer) {
+      if (!viewer)
+        throw new Error("undefined viewer");
+      this.layer = viewer.imageryLayers.addImageryProvider(this._provider);
+      this.layer["id"] = this.id;
+      return this.layer;
+    }
+    remove(viewer) {
+      if (!viewer)
+        throw new Error("undefined viewer");
+      viewer.imageryLayers.remove(this.layer);
+    }
+  }
+
   var layerModule = {
-    TiandituLayer
+    TiandituLayer,
+    AmapLayer
   };
 
   let CesiumNicer = {

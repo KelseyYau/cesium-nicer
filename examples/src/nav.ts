@@ -20,6 +20,10 @@ const layerModule = [
       name: '天地图',
       url: '/layerModule/tianditu',
       id: '2-1'
+    },{
+      name: '高德地图',
+      url: '/layerModule/amap',
+      id: '2-2'
     }]
   }
 ]

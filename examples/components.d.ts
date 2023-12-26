@@ -16,6 +16,7 @@ declare module 'vue' {
     ElMenuItem: typeof import('element-plus/es')['ElMenuItem']
     ElMenuItemGroup: typeof import('element-plus/es')['ElMenuItemGroup']
     ElSubMenu: typeof import('element-plus/es')['ElSubMenu']
+    LayerAmap: typeof import('./src/components/layers/LayerAmap.vue')['default']
     LayerTianditu: typeof import('./src/components/layers/LayerTianditu.vue')['default']
     PresetsViewer: typeof import('./src/components/presets/PresetsViewer.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']

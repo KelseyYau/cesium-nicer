@@ -1,4 +1,5 @@
 import LayerTianditu from "@/components/layers/LayerTianditu.vue"
+import LayerAmap from "@/components/layers/LayerAmap.vue"
 
 export default [
   {
@@ -10,5 +11,10 @@ export default [
     path: '/layerModule/tianditu',
     name: 'tianditu',
     component: LayerTianditu
+  },
+  {
+    path: '/layerModule/amap',
+    name: 'tianditu',
+    component: LayerAmap
   }
 ]

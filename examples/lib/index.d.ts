@@ -1,4 +1,4 @@
-declare const _default$1: {
+declare const _default$2: {
     viewerConfig: {
         animation: boolean;
         baseLayerPicker: boolean;
@@ -86,9 +86,47 @@ declare class AmapLayer extends BaseLayer {
     remove(viewer: Cesium.Viewer): void;
 }
 
-declare const _default: {
+declare class CustomArcGISImageryProvider extends Cesium.ArcGisMapServerImageryProvider {
+    _resource: any;
+    constructor(options: any);
+    static fromUrl(url: string, options: any): Promise<CustomArcGISImageryProvider>;
+    requestImage(x: any, y: any, level: any, request: any): any;
+}
+
+declare const _default$1: {
     TiandituLayer: typeof TiandituLayer;
     AmapLayer: typeof AmapLayer;
+    CustomArcGISImageryProvider: typeof CustomArcGISImageryProvider;
 };
 
-export { CMap, _default as layerModule, _default$1 as presets };
+declare class GaussProjectTilingScheme extends Cesium.WebMercatorTilingScheme {
+    private _projection;
+    private _resolutions;
+    private _origin;
+    private _extent;
+    private _epsgCode;
+    private _rectangleSouthwestInMeters;
+    private _rectangleNortheastInMeters;
+    private _rectangle;
+    private _tileSize;
+    private _numberOfLevelZeroTilesX;
+    private _numberOfLevelZeroTilesY;
+    constructor(options: any);
+    initZeroTilesXY(): void;
+    rectangleToNativeRectangle(rectangle: any, result: any): any;
+    tileXYToNativeRectangle(x: any, y: any, level: any, result: any): any;
+    tileXYToRectangle(x: any, y: any, level: any, result: any): any;
+    positionToTileXY(position: any, level: any, result: any): any;
+}
+
+declare class Gcj02TilingScheme extends Cesium.WebMercatorTilingScheme {
+    private _projection;
+    constructor(options: any);
+}
+
+declare const _default: {
+    GaussProjectTilingScheme: typeof GaussProjectTilingScheme;
+    Gcj02TilingScheme: typeof Gcj02TilingScheme;
+};
+
+export { CMap, _default$1 as layerModule, _default$2 as presets, _default as tilingScheme };

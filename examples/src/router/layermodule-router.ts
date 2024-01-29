@@ -1,20 +1,20 @@
-import LayerTianditu from "@/components/layers/LayerTianditu.vue"
-import LayerAmap from "@/components/layers/LayerAmap.vue"
+// import LayerTianditu from "@/components/layers/LayerTianditu.vue"
+// import LayerAmap from "@/components/layers/LayerAmap.vue"
 
 export default [
   {
     path: '/layerModule',
-    name: 'presets',
-    component: LayerTianditu
+    name: '',
+    component: () => import("@/components/layers/LayerTianditu.vue")
   },
   {
     path: '/layerModule/tianditu',
     name: 'tianditu',
-    component: LayerTianditu
+    component: () => import("@/components/layers/LayerTianditu.vue")
   },
   {
     path: '/layerModule/amap',
-    name: 'tianditu',
-    component: LayerAmap
+    name: 'amap',
+    component: () => import("@/components/layers/LayerAmap.vue")
   }
 ]

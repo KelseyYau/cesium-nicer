@@ -13,7 +13,14 @@ onMounted(() => {
     type: 'img',
     tk: '42235c2540c0aa7d3e7630d9aa144ff5'
   })
+  map.viewer.camera.setView({ destination: Cesium.Cartesian3.fromDegrees(114.33598900442146,22.775838916286627,165215)})
   tiandituLayer.add(map.viewer)
+  const customArcGIS = layerModule.CustomArcGISImageryProvider.fromUrl('/arcgis/rest/services/shenzhen/MapServer')
+  customArcGIS.then((provider: any) => {
+    map.viewer.imageryLayers.addImageryProvider(provider)
+  })
+  const provider = new Cesium.GridImageryProvider({})
+  map.viewer.imageryLayers.addImageryProvider(provider)
 })
 
 </script>

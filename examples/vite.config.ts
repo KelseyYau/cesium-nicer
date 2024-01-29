@@ -21,5 +21,14 @@ export default defineConfig({
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url))
     }
+  },
+  server: {
+    proxy: {
+      '/arcgis': {
+        target: 'http://localhost:6080', // 目标地址 --> 服务器地址
+        changeOrigin: true, // 允许跨域
+        rewrite: path => path.replace(/^\/arcgis/, '/arcgis')
+      }
+    }
   }
 })

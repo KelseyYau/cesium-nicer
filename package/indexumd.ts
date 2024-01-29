@@ -1,9 +1,11 @@
 import presets from "./presets"
 import layerModule from "./layerModule"
+import tilingScheme from "./tilingScheme"
 
 let CesiumNicer = {
   presets,
-  layerModule
+  layerModule,
+  tilingScheme
 }
 
 export default CesiumNicer
